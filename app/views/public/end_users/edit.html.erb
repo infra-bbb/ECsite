@@ -1,2 +1,18 @@
-<h1>Public::EndUsers#edit</h1>
-<p>Find me in app/views/public/end_users/edit.html.erb</p>
+<% if @end_user.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@end_user.errors.count, "error") %> prohibited this account from being saved:</h2>
+    <ul>
+      <% @end_user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+<h1>Editing profile</h1>
+<%= form_for(@end_user, url: public_end_user_path(@end_user)) do |f| %>
+  <span>メールアドレス</span>
+  <%= f.email_field :email %><br>
+  <%= f.submit 'Update profile' %>
+<% end %>

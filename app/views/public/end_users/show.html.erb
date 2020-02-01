@@ -1,2 +1,8 @@
 <h1>Public::EndUsers#show</h1>
 <p>Find me in app/views/public/end_users/show.html.erb</p>
+
+<h3>名前: <%= @end_user.last_name %> <%= @end_user.first_name %><h3>
+<h3>メールアドレス: <%= @end_user.email %> </h3>
+
+<%= link_to "編集", edit_public_end_user_path(@end_user) %>
+<%= link_to "退会", public_end_user_path(@end_user), method: :delete, data: {confirm: 'Are You Sure?'} %>

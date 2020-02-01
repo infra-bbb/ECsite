@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  # namespace :admin do
+  #   get 'end_users/index'
+  #   get 'end_users/show'
+  #   get 'end_users/edit'
+  #   get 'end_users/update'
+  #   get 'end_users/destroy'
+  # end
   # namespace :public do
   #   get 'end_users/show'
   #   get 'end_users/edit'
@@ -30,7 +37,7 @@ Rails.application.routes.draw do
     resources :items, only: [:index, :show]
     resources :addresses, only: [:index, :create, :update, :destroy, :edit]
 
-    resources :end_users, only: [:show, :edit, :update]
+    resources :end_users, only: [:show, :edit, :update, :destroy]
     get 'end_users/status' => 'end_users#status'
 
     resources :cart_items, only: [:index, :update, :destroy, :create]
@@ -43,8 +50,8 @@ Rails.application.routes.draw do
     get '/top' => 'tops#top'
     resources :items, except: [:destroy]
     resources :genres, only: [:index, :edit, :update, :create]
-    resources :end_users, except: [:create]
     resources :orders, only: [:index, :show, :update]
+    resources :end_users, except: [:create]
   end
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

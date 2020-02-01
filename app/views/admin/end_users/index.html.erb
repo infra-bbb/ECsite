@@ -1,0 +1,24 @@
+<h1>Admin::EndUsers#index</h1>
+<p>Find me in app/views/admin/end_users/index.html.erb</p>
+<table>
+  <thead>
+    <tr>
+      <th>名前</th>
+      <th>メールアドレス</th>
+      <th>ステータス</th>
+    </tr>
+  </thead>
+  <% @end_users.each do |end_user| %>
+    <tbody>
+      <tr>
+        <td><%= end_user.last_name %> <%= end_user.first_name %></td>
+        <td><%= end_user.email %></td>
+        <% unless end_user.deleted_at? %>
+          <td></td>
+        <% else %>
+          <td>退会済み</td>
+        <% end %>
+      </tr>
+    </tbody>
+  <% end %>
+</table>

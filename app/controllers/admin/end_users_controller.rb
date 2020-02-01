@@ -1,12 +1,7 @@
-class Admin::ItemsController < ApplicationController
+class Admin::EndUsersController < ApplicationController
   before_action :authenticate_admin!
-  def new
-  end
-
-  def create
-  end
-
   def index
+    @end_users = EndUser.with_deleted
   end
 
   def show
@@ -17,4 +12,6 @@ class Admin::ItemsController < ApplicationController
 
   def update
   end
+
+  private
 end

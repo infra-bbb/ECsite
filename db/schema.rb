@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_01_074139) do
+ActiveRecord::Schema.define(version: 2020_02_01_093116) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "recipient_name", null: false
@@ -57,6 +57,8 @@ ActiveRecord::Schema.define(version: 2020_02_01_074139) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_end_users_on_deleted_at"
     t.index ["email"], name: "index_end_users_on_email", unique: true
     t.index ["first_name"], name: "index_end_users_on_first_name"
     t.index ["last_name"], name: "index_end_users_on_last_name"
