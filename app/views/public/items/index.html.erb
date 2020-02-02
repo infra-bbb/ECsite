@@ -4,8 +4,6 @@
     <tr>
       <th>商品名</th>
       <th>値段</th>
-      <th>ジャンル</th>
-      <th>販売ステータス</th>
     </tr>
   </thead>
   <% @items.each do |item| %>
@@ -13,8 +11,6 @@
       <tr>
         <td><%= item.name %></td>
         <td><%= item.price %> 円</td>
-        <td><%= item.genre_id %></td>
-        <td><%= item.status %></td>
       </tr>
     </tbody>
   <% end %>

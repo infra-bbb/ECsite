@@ -1,2 +1,27 @@
-<h1>Admin::Items#new</h1>
-<p>Find me in app/views/admin/items/new.html.erb</p>
+<% if @item.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@item.errors.count, "error") %> prohibited this item from being saved:</h2>
+    <ul>
+      <% @item.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+<h1>商品登録</h1>
+<%= form_for(@item, url: admin_items_path) do |f| %>
+  <span>タイトル</span><br>
+  <%= f.text_field :name %><br>
+  <span>値段<br>
+  <%= f.text_field :price %> 円</span><br>
+  <span>ジャンル</span>
+  <%= f.collection_select :genre_id, Genre.all, :id, :name %><br>
+  <span>販売ステータス</span><br>
+  <%= f.radio_button :status, :販売中 %>
+  <span>販売中</span>
+  <%= f.radio_button :status, :販売停止中 %>
+  <span>販売停止中</span><br>
+  <%= f.submit '登録' %>
+<% end %>

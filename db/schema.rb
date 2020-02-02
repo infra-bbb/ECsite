@@ -74,9 +74,9 @@ ActiveRecord::Schema.define(version: 2020_02_01_093116) do
 
   create_table "items", force: :cascade do |t|
     t.string "name", null: false
-    t.text "description", null: false
+    t.text "description"
     t.integer "price", null: false
-    t.string "item_image_id", null: false
+    t.string "item_image_id"
     t.boolean "status", null: false
     t.integer "genre_id", null: false
     t.datetime "created_at", null: false

@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  # namespace :public do
+  #   get 'items/index'
+  #   get 'items/root'
+  #   get 'items/show'
+  # end
   # namespace :admin do
   #   get 'end_users/index'
   #   get 'end_users/show'
