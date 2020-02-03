@@ -14,4 +14,6 @@ class EndUser < ApplicationRecord
     validates :phone_number
     validates :status
   end
+
+  has_many :cart_items, dependent: :destroy
 end

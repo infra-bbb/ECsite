@@ -12,7 +12,7 @@
   <header>
   <% if end_user_signed_in? %>
     <%= link_to "マイページ", public_end_user_path(current_end_user), class: 'glyphicon glyphicon-log-out' %>
-    <%= link_to "カート一覧", "#", class: 'glyphicon glyphicon-log-out' %>
+    <%= link_to "カート一覧", public_cart_items_path, class: 'glyphicon glyphicon-log-out' %>
     <%= link_to "ログアウト", destroy_end_user_session_path, method: :delete, class: 'glyphicon glyphicon-log-out' %>
   <% elsif admin_signed_in? %>
     <%= link_to "受付一覧", "#", class: 'glyphicon glyphicon-log-out' %>

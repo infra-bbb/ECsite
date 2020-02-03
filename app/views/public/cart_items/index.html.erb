@@ -1,0 +1,45 @@
+<h2>カート内商品一覧</h2>
+<% if flash[:error] %>
+<div class="existing">
+  <b><%= flash[:error] %></b>
+</div>
+<% end %>
+<% if @cart.present? %>
+  <%= @cart.each do |c| %>
+  <% end %>
+<% end %>
+<table>
+  <thead>
+    <tr>
+      <th>商品名(item_id)</th>
+      <th>数量</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+  <% @cart_items.each do |cart_item| %>
+    <tbody>
+      <tr>
+        <% if cart_item.item_id == 1 %>
+          <td>ハーゲンダッツ(<%= cart_item.item_id %>)</td>
+        <% elsif cart_item.item_id == 2 %>
+          <td>チョコケーキ(<%= cart_item.item_id %>)</td>
+        <% elsif cart_item.item_id == 3 %>
+          <td>一期ケーキ(<%= cart_item.item_id %>)</td>
+        <% elsif cart_item.item_id == 4 %>
+          <td>ソフトクリーム(<%= cart_item.item_id %>)</td>
+        <% end %>
+        <td><%= cart_item.amount %></td>
+        <td>
+          <%= form_for(cart_item, url: public_cart_item_path(cart_item)) do |f| %>
+            <%= f.number_field :amount, min:1, :class => 'number_field' %>
+            <%= f.submit '変更' %>
+          <% end %>
+        </td>
+        <td><%= link_to "削除", public_cart_item_path(cart_item), method: :delete %></td>
+      </tr>
+    </tbody>
+  <% end %>
+</table>
+<% if @cart_items.empty? == false %>
+  <%= link_to "すべて削除", public_cart_items_path, method: :delete %>
+<% end %>

@@ -13,3 +13,12 @@
  *= require_tree .
  *= require_self
  */
+
+
+.number_field {
+    width: 35px;
+}
+
+.existing {
+    color: red;
+}

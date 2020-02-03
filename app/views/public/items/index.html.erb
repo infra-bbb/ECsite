@@ -3,14 +3,12 @@
   <thead>
     <tr>
       <th>商品名</th>
-      <th>値段</th>
     </tr>
   </thead>
   <% @items.each do |item| %>
     <tbody>
       <tr>
-        <td><%= item.name %></td>
-        <td><%= item.price %> 円</td>
+        <td><%= link_to item.name, public_item_path(item) %></td>
       </tr>
     </tbody>
   <% end %>
