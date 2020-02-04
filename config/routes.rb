@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   }
 
 
-  root to: 'public/items#root'  
+  root to: 'public/items#index'  
   namespace :public do
     resources :items, only: [:index, :show]
     resources :addresses, only: [:index, :create, :update, :destroy, :edit]
