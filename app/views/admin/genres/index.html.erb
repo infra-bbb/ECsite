@@ -1,0 +1,31 @@
+<h1>ジャンル一覧</h1>
+<table>
+  <thead>
+    <tr>
+      <th>ジャンル名</th>
+      <th>表示ステータス</th>
+      <th></th>
+    </tr>
+  </thead>
+  <% @genres.each do |genre| %>
+    <tbody>
+      <tr>
+        <td><%= genre.name %></td>
+        <td><%= genre.status %></td>
+        <td><%= link_to "編集", edit_admin_genre_path(genre) %></td>
+      </tr>
+    </tbody>
+  <% end %>
+</table>
+
+<h1>ジャンル登録</h1>
+<%= form_for(@genre, url: admin_genres_path) do |f| %>
+  <span>ジャンル名</span><br>
+  <%= f.text_field :name %><br>
+  <span>表示ステータス</span><br>
+  <%= f.radio_button :status, :有効 %>
+  <span>有効</span>
+  <%= f.radio_button :status, :無効 %>
+  <span>無効</span><br>
+  <%= f.submit '登録' %>
+<% end %>

@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+  namespace :admin do
+    get 'genres/index'
+    get 'genres/edit'
+  end
+  namespace :admin do
+    get 'orders/index'
+    get 'orders/show'
+    get 'orders/update'
+  end
   devise_for :admins, controllers: {
     sessions:      'admins/sessions',
     passwords:     'admins/passwords',
@@ -10,8 +19,7 @@ Rails.application.routes.draw do
     registrations: 'end_users/registrations'
   }
 
-
-  root to: 'public/items#root'  
+  root to: 'public/items#index'
   namespace :public do
     resources :items, only: [:index, :show]
     resources :addresses, only: [:index, :create, :update, :destroy, :edit]
@@ -22,13 +30,18 @@ Rails.application.routes.draw do
     delete '/cart_items' => 'cart_items#destroy_all', as: "cart_items"
     resources :cart_items, only: [:index, :update, :destroy, :create]
     
+    get 'orders/confirm' => 'orders#confirm'
+    get 'orders/done' => 'orders#done'
+    get 'orders/register' => 'orders#register'
+    get 'orders/pay/:pre_payment' => 'orders#pay', as: "pay"
     resources :orders, only: [:new, :create, :index, :show]
-    get 'end_users/orders/confirm' => 'orders#confirm'
   end
   namespace :admin do
     get '/top' => 'tops#top'
     resources :items, except: [:destroy]
     resources :genres, only: [:index, :edit, :update, :create]
+
+    patch 'orders/delivery/:id' => 'orders#update_delivery', as: 'delivery'
     resources :orders, only: [:index, :show, :update]
     resources :end_users, except: [:create]
   end

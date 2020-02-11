@@ -1,0 +1,46 @@
+<h2>購入情報確認画面</h2>
+<% if flash[:anomaly] %>
+<div class="existing">
+  <b><%= flash[:anomaly] %></b>
+</div>
+<% end %>
+<% if session[:order][:payment_way] == nil %>
+  <%= link_to "クレジット", public_pay_path(:pre_payment => 0) %>　
+  <%= link_to "銀行振込", public_pay_path(:pre_payment => 1) %>
+  <%= link_to "着払い", public_pay_path(:pre_payment => 2) %>
+<% else %>
+  <p><strong><%= session[:order][:payment_way] %></strong> が選択されています</p>
+  <%= button_to "再選択", new_public_order_path, :method => :get %>
+<% end %>
+
+<% if session[:order][:payment_way] != nil %>
+  <h2>配送先</h2>
+  <h3>配送履歴</h3>
+  <% @addresses.each do |address| %>
+    <h4><%= link_to address.recipient_name,  public_orders_register_path(id: address.id) %></h4>
+    <span>
+      〒 <%= address.postal_code %> <br>
+        <%= address.address %>
+      <hr>
+    </span>
+  <% end %>
+  <h3>自宅</h3>
+  <%= link_to (public_orders_register_path(id: 0)) do%>
+    <h4><%= current_end_user.last_name %> <%= current_end_user.first_name %></h4>
+  <% end %>
+  <span>
+    〒 <%= current_end_user.postal_code %> <br>
+      <%= current_end_user.address %>
+    <hr>
+  </span>
+  <h3>新規登録</h3>
+  <%= form_with url: public_orders_path do |f| %>
+    <span>受取人氏名</span><br>
+    <%= f.text_field :recipient_name %><br>
+    <span>郵便番号(ハイフン不要)</span><br>
+    <%= f.text_field :postal_code %></span><br>
+    <span>住所</span><br>
+    <%= f.text_field :address %><br>
+    <%= f.submit '登録' %>
+  <% end %>
+<% end %>

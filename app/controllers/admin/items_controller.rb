@@ -1,5 +1,7 @@
 class Admin::ItemsController < ApplicationController
   before_action :authenticate_admin!
+  before_action :item_info, only: [:show, :edit, :update]
+  
   def new
     @item = Item.new
   end
@@ -15,7 +17,12 @@ class Admin::ItemsController < ApplicationController
   end
 
   def index
-    @items = Item.all
+    @items = {}
+    items = Item.all
+    items.each do |item|
+      genre = Genre.find(item.genre_id)
+      @items[genre.name] = item
+    end
   end
 
   def show
@@ -25,10 +32,16 @@ class Admin::ItemsController < ApplicationController
   end
 
   def update
+    @item.update(item_params)
+    redirect_to admin_items_path
   end
 
   private
   def item_params
     params.require(:item).permit(:name, :price, :genre_id, :status)
+  end
+
+  def item_info
+    @item = Item.find(params[:id])
   end
 end

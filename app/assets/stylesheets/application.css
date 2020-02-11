@@ -22,3 +22,14 @@
 .existing {
     color: red;
 }
+
+.pre-container {
+    width: auto;
+    height: auto;
+    border: solid 1px black;
+}
+
+.uzi {
+    font-weight: bold;
+    font-size: 1.17em;
+}

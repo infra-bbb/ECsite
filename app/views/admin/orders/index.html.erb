@@ -1,0 +1,29 @@
+<h3>受注一覧</h3>
+<table>
+  <thead>
+    <tr>
+      <th>注文者名(id)</th>
+      <th>合計金額</th>
+      <th>送料</th>
+      <th>受取人氏名</th>
+      <th>郵便番号</th>
+      <th>住所</th>
+      <th>注文ステータス</th>
+      <th></th>
+    </tr>
+  </thead>
+  <% @orders.each do |order| %>
+    <tbody>
+      <tr>
+        <td><%= order[0] %>(<%= order[1].end_user_id %>)</td>
+        <td><%= order[1].total_price %> 円</td>
+        <td><%= order[1].postage %> 円</td>
+        <td><%= order[1].recipient_name %></td>
+        <td><%= order[1].postal_code %></td>
+        <td><%= order[1].address %></td>
+        <td><%= order[1].status %></td>
+        <td><%= link_to "注文詳細へ", admin_order_path(order[1]) %>
+      </tr>
+    </tbody>
+  <% end %>
+</table>

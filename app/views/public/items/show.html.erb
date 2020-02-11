@@ -1,3 +1,8 @@
+<% if flash[:error] %>
+  <div class="existing">
+    <%= flash[:error] %>
+  </div>
+<% end %>
 <h3><%= @item.name %></h3>
 <span>値段: <%= @item.price %> 円</span>
 <%= form_for(@cart_item, url: public_cart_items_path(:item_id => @item.id)) do |f| %>

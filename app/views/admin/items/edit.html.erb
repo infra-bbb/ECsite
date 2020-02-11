@@ -1,2 +1,14 @@
-<h1>Admin::Items#edit</h1>
-<p>Find me in app/views/admin/items/edit.html.erb</p>
+<%= form_for(@item, url: admin_item_path(@item)) do |f| %>
+  <span>商品名</span><br>
+  <%= f.text_field :name %><br>
+  <span>値段<br>
+  <%= f.text_field :price %> 円</span><br>
+  <span>ジャンル</span>
+  <%= f.collection_select :genre_id, Genre.all, :id, :name %><br>
+  <span>販売ステータス</span><br>
+  <%= f.radio_button :status, :販売中 %>
+  <span>販売中</span>
+  <%= f.radio_button :status, :販売停止中 %>
+  <span>販売停止中</span><br>
+  <%= f.submit '更新' %>
+<% end %>

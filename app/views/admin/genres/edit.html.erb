@@ -1,0 +1,11 @@
+<h1>ジャンル編集画面</h1>
+<%= form_for(@genre, url: admin_genre_path(@genre)) do |f| %>
+  <span>ジャンル名</span><br>
+  <%= f.text_field :name %><br>
+  <span>表示ステータス</span><br>
+  <%= f.radio_button :status, :有効 %>
+  <span>有効</span>
+  <%= f.radio_button :status, :無効 %>
+  <span>無効</span><br>
+  <%= f.submit '更新' %>
+<% end %>

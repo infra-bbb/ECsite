@@ -29,6 +29,9 @@ class Public::EndUsersController < ApplicationController
   private
   def end_user_info
     @end_user = EndUser.find(params[:id])
+    if @end_user.id != current_end_user.id
+      redirect_to public_end_user_path(current_end_user)
+    end
   end
 
   def end_user_params

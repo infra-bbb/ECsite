@@ -1,8 +1,15 @@
 class Public::CartItemsController < ApplicationController
   before_action :cart_item_info, only: [:destroy, :update]
+  before_action :authenticate_end_user!, only: [:create, :index]
+  before_action :blank_check, only: [:create]
 
   def index
-    @cart_items = CartItem.where(end_user_id: current_end_user.id)
+    @cart_items = {}
+    cart_items = CartItem.where(end_user_id: current_end_user.id)
+    cart_items.each do |cart_item|
+      item = Item.find(cart_item.item_id)
+      @cart_items[item.name] = cart_item
+    end
   end
 
   def update
@@ -45,5 +52,13 @@ class Public::CartItemsController < ApplicationController
 
   def cart_item_info
     @cart_item = CartItem.find(params[:id])
+  end
+
+  def blank_check
+    amount = params.dig(:cart_item, :amount)
+    if amount == ""
+      flash[:error] = "数をしてしてください"
+      redirect_to public_item_path(params[:item_id])
+    end
   end
 end

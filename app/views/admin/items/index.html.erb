@@ -6,15 +6,17 @@
       <th>値段</th>
       <th>ジャンル</th>
       <th>販売ステータス</th>
+      <th></th>
     </tr>
   </thead>
   <% @items.each do |item| %>
     <tbody>
       <tr>
-        <td><%= item.name %></td>
-        <td><%= item.price %> 円</td>
-        <td><%= item.genre_id %></td>
-        <td><%= item.status %></td>
+        <td><%= item[1].name %></td>
+        <td><%= item[1].price %> 円</td>
+        <td><%= item[0] %></td>
+        <td><%= item[1].status %></td>
+        <td><%= link_to "編集", edit_admin_item_path(item[1]) %></td>
       </tr>
     </tbody>
   <% end %>

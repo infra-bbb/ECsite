@@ -1,0 +1,23 @@
+<h3>注文詳細画面</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>item_id</th>
+      <th>数量</th>
+      <th>小計</th>
+      <th>製作ステータス</th>
+    </tr>
+  </thead>
+  <% @order_details.each do |order_detail| %>
+    <tbody>
+      <tr>
+        <th><%= order_detail.item_id %></th>
+        <th><%= order_detail.amount %></th>
+        <th><%= order_detail.subtotal %> 円</th>
+        <th><%= order_detail.status %></th>
+      </tr>
+    </tbody>
+  <% end %>
+
+</table>
