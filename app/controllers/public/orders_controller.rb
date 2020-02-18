@@ -1,5 +1,4 @@
 class Public::OrdersController < ApplicationController
-  before_action :nilCheck, only: [:done]
 
   def new
     @address = Address.new
