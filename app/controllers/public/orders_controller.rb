@@ -2,103 +2,89 @@ class Public::OrdersController < ApplicationController
   before_action :nilCheck, only: [:done]
 
   def new
-    session[:order] = Order.new
+    @address = Address.new
+    @addresses = Address.where(end_user_id: current_end_user.id)
+    session[:order] = nil
   end
 
-  def confirm
-    @cart_items = {}
-    @total = 0
-    @postage = 800
-    cart_items = CartItem.where(end_user_id: current_end_user.id)
-    cart_items.each do |cart_item|
-      item = Item.find(cart_item.item_id)
-      @cart_items[item] = cart_item
-    end
-  end
-
-  def done
+  def register
     postage = 800
-    cart_items = CartItem.where(end_user_id: current_end_user.id)
-    total_price = 0
+    total_price = 0 + 800
 
-    # make order info
-    cart_items.each do |cart_item|
+    address_id = params[:address]
+    address_id = address_id.to_i
+    if address_id > 0
+      address = Address.find(address_id)
+    else
+      recipient_name = current_end_user.last_name + current_end_user.first_name
+      address = Address.new(recipient_name: recipient_name,
+                            postal_code: current_end_user.postal_code,
+                            address: current_end_user.address )
+    end
+    cart_items = CartItem.where(end_user_id: current_end_user.id)
+    cart_items.each do |cart_item| 
       item = Item.find(cart_item.item_id)
       total_price += item.price * cart_item.amount
     end
-    total_price += postage
-    @order = Order.new(total_price: total_price,
-                       postage: postage,
-                       payment_way: session[:order]["payment_way"],
-                       recipient_name: session[:address]["recipient_name"],
-                       postal_code: session[:address]["postal_code"],
-                       address: session[:address]["address"],
-                       end_user_id: current_end_user.id)
-    @order.save
-
-    # make order_detrail info
-    cart_items.each do |cart_item|
-      item = Item.find(cart_item.item_id)
-      order_detail = OrderDetail.new(amount: cart_item.amount,
-                                     subtotal: cart_item.amount * item.price,
-                                     order_id: @order.id,
-                                     item_id: item.id)
-      order_detail.save
-      cart_item.destroy
-    end
-
-    # make Address info
-    if session[:newAddress] == 1
-      address = Address.new(recipient_name: session[:address]["recipient_name"], 
-                            postal_code: session[:address]["postal_code"],
-                            address: session[:address]["address"],
-                            end_user_id: current_end_user.id)
-      address.save
-    end
-    session[:order] = nil
-    session[:address] = nil
-    session[:newAddress] = nil
-  end
-
-  def pay
-    keys = params[:pre_payment]
-    session[:order][:payment_way] = Order.payment_ways.keys[keys.to_i]
-    @addresses = Address.where(end_user_id: current_end_user.id)
-    @order = Order.new
-    render :new
-  end
-
-  def create
-    postage = 800
-    total_price = 0
-    session[:address] = Address.new(recipient_name: params[:recipient_name], 
-                                    postal_code: params[:postal_code],
-                                    address: params[:address])
-    if session[:address]["recipient_name"] == "" or session[:address]["postal_code"] == "" or session[:address]["address"] == ""
-      flash[:anomaly] = "配送先に未入力のものがあります"
-      # render :new
+    session[:order] = Order.new(total_price: total_price,
+                                postage: postage,
+                                payment_way: params[:payment_way],
+                                recipient_name: address.recipient_name,
+                                postal_code: address.postal_code,
+                                address: address.address,
+                                end_user_id: current_end_user.id)
+    if session[:order]["payment_way"] == nil
+      flash[:none] = "支払方法が選択されていません"
       redirect_to new_public_order_path
     else
-      session[:newAddress] = 1
       redirect_to public_orders_confirm_path
     end
   end
 
-  def register
-    if params[:id] == "0"
-      recipient_name = current_end_user.last_name + current_end_user.first_name
-      session[:address] = Address.new(recipient_name: recipient_name,
-                                      postal_code: current_end_user.postal_code,
-                                      address: current_end_user.address)
-    else
-      address = Address.find(params[:id])
-      session[:address] = Address.new(recipient_name: address.recipient_name,
-                                      postal_code: address.postal_code,
-                                      address: address.address)
+  def confirm
+    @orders = []
+    cart_items = CartItem.where(end_user_id: current_end_user.id)
+    cart_items.each do |cart_item| 
+      item = Item.find(cart_item.item_id)
+      subtotal = item.price * cart_item.amount
+      order_detail = OrderDetail.new(amount: cart_item.amount,
+                                     subtotal: item.price * cart_item.amount)
+      @orders.push([item.name, order_detail])
     end
-    session[:newAddress] = 0
-    redirect_to public_orders_confirm_path
   end
+
+  def create_address
+    @address = Address.new(address_params)
+    @address.end_user_id = current_end_user.id
+    @address.save
+    redirect_to new_public_order_path
+  end
+
+  def create
+    order = Order.new(total_price: session[:order]["total_price"],
+                      postage: session[:order]["postage"],
+                      payment_way:session[:order]["payment_way"],
+                      recipient_name: session[:order]["recipient_name"],
+                      postal_code: session[:order]["postal_code"],
+                      address: session[:order]["address"],
+                      end_user_id: session[:order]["end_user_id"])
+    order.save
+    
+    cart_items = CartItem.where(end_user_id: current_end_user.id)
+    cart_items.each do |cart_item| 
+      item = Item.find(cart_item.item_id)
+      subtotal = item.price * cart_item.amount
+      order_detail = OrderDetail.new(amount: cart_item.amount,
+                                     subtotal: item.price * cart_item.amount,
+                                     order_id: order.id,
+                                     item_id: item.id)
+      order_detail.save
+      cart_item.destroy
+    end
+    redirect_to public_orders_done_path
+  end
+
+  
 
   def index
     @orders = Order.where(end_user_id: current_end_user.id)
@@ -112,6 +98,10 @@ class Public::OrdersController < ApplicationController
 
   def order_params
     params.require(:order).permit(:recipient_name, :postal_code, :address, :payment_way)
+  end
+
+  def address_params
+    params.require(:address).permit(:recipient_name, :postal_code, :address, :end_user_id)
   end
 
   def nilCheck

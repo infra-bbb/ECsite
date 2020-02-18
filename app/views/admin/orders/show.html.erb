@@ -1,5 +1,7 @@
 <h2>注文詳細画面</h2>
-
+<% if flash[:update] %>
+  <%= flash[:update] %>
+<% end %>
 <h3>注文詳細</h3>
 <table>
   <thead>
@@ -13,14 +15,14 @@
   <% @order_details.each do |order_detail| %>
     <tbody>
       <tr>
-        <td><%= order_detail[0] %>(<%= order_detail[1].item_id %>)</td>
+        <td><%= order_detail[0] %>(<%= order_detail[1].item_id %>)(<%= order_detail[1].id %>)</td>
         <td><%= order_detail[1].amount %> 個</td>
         <td><%= order_detail[1].subtotal %> 円</td>
         <td>
           <%= order_detail[1].status %>
         </td>
         <td>
-          <%=form_with model: order_detail, url: admin_order_path(order_detail[1].id) do |f| %>
+          <%= form_with model: order_detail[1], url: admin_order_path(order_detail[1].id) do |f| %>
               <br><%= f.radio_button :status, :着手不可 %>
               <span>着手不可</span>
               <br><%= f.radio_button :status, :製作待ち %>
@@ -38,7 +40,7 @@
 </table>
 <h3>配送ステータス</h3>
 
-<%=form_with model: @order, url: admin_delivery_path(@order) do |f| %>
+<%= form_with model: @order, url: admin_delivery_path(@order.id) do |f| %>
   <%= f.radio_button :status, :入金待ち %>
   <span>入金待ち</span>
   <%= f.radio_button :status, :入金確認 %>
@@ -51,3 +53,5 @@
   <span>発送済み</span><br>
   <%= f.submit '更新' %>
 <% end %>
+
+<%= link_to "受注一覧へ", admin_orders_path %>

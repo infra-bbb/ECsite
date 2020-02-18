@@ -1,65 +1,59 @@
 <h2>注文内容確認</h2>
 
+<h3>注文内容</h3>
 <table>
   <thead>
     <tr>
-      <th>購入内容</th>
-      <th>お届け先</th>
-      <th>支払方法</th>
+      <th>商品名</th>
+      <th>個数</th>
+      <th>小計</th>
     </tr>
   </thead>
+  <% @orders.each do |order| %>
     <tbody>
       <tr>
-        <td>
-          <table>
-            <thead>
-              <tr>
-                <th>商品名</th>
-                <th>数量</th>
-                <th>小計</th>
-              </tr>
-            </thead>
-            <% @cart_items.each do |cart_item| %>
-              <tbody>
-                <tr>
-                  <td><%= cart_item[0].name %> </td>
-                  <td>(<%= cart_item[0].price %>円)×<%= cart_item[1].amount %> 個</td>
-                  <td><%= cart_item[0].price * cart_item[1].amount %> 円</td>
-                  <% @total += cart_item[0].price * cart_item[1].amount %>
-                </tr>
-              </tbody>
-            <% end %>
-            <tbody>
-                <tr>
-                  <td>送料</td>
-                  <td>一律</td>
-                  <td><%= @postage %> 円</td>
-                </tr>
-                <tr>
-                  <td>合計</td>
-                  <td></td>
-                  <td><b><%= @total + @postage %> 円<b></td>
-                </tr>
-              </tbody>
-          </table>
-        </td>
-        <td>
-          <span>
-            受取人氏名<br>
-            <%= session[:address]["recipient_name"] %><br>
-          </span>
-          <span>
-            郵便番号<br>
-            <%= session[:address]["postal_code"] %><br>
-          </span>
-          <span>
-            住所<br>
-            <%= session[:address]["address"] %><br>
-          </span>
-        </td>
-        <td><%= session[:order]["payment_way"] %></td>
+        <td><%= order[0] %></td>
+        <td><%= order[1].amount %>つ</td>
+        <td><%= order[1].subtotal %> 円</td>
       </tr>
-    </tbody>
+    <tbody>
+  <% end %>
+  <tbody>
+    <tr>
+      <td>送料</td>
+      <td></td>
+      <td><%= session[:order]["postage"] %> 円</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>合計</td>
+      <td></td>
+      <td><h4><%= session[:order]["total_price"] %> 円</h4></td>
+    </tr>
+  </tbody>
 </table>
 
-<h3><%= link_to "注文確定", public_orders_done_path %></h3>
+
+<h3>支払方法</h3>
+<%= session[:order]["payment_way"] %>
+
+<h3>お届け先</h3>
+<table>
+  <thead>
+    <tr>
+      <th>受取人氏名</th>
+      <th>郵便番号</th>
+      <th>住所</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= session[:order]["recipient_name"] %></td>
+      <td><%= session[:order]["postal_code"] %></td>
+      <td><%= session[:order]["address"] %></td>
+    </tr>
+  <tbody>
+</table>
+
+<%= link_to "注文を確定する", public_orders_path, :method => :post%>

@@ -6,6 +6,6 @@
 <h3><%= @item.name %></h3>
 <span>値段: <%= @item.price %> 円</span>
 <%= form_for(@cart_item, url: public_cart_items_path(:item_id => @item.id)) do |f| %>
-  <%= f.number_field :amount, min:1, :class => 'number_field' %>
+  <%= f.number_field :amount, min:1, :class => 'number_field', :value => 1 %>
   <%= f.submit 'カートに追加' %>
 <% end %>

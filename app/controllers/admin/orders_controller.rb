@@ -21,14 +21,24 @@ class Admin::OrdersController < ApplicationController
 
   def update
     @order_detail = OrderDetail.find(params[:id])
-    @order_detail.update(order_detail_params)
-    redirect_to admin_order_path(@order_detail.order_id)
+    if @order_detail.update(order_detail_params)
+      flash[:update] = "製作ステータスを更新しました"
+      redirect_to admin_order_path(@order_detail.order_id)
+    end
   end
 
   def update_delivery
     @order = Order.find(params[:id])
-    @order.update(order_params)
-    redirect_to admin_orders_path
+    @order.status = params.dig(:order, :status)
+    @order.save
+    flash[:update] = "配送ステータスを更新しました"
+    redirect_to admin_order_path(@order)
+    # if @order.update(order_params)
+    #   redirect_to admin_orders_path
+    # else
+    #   redirect_to admin_order_path(@order)
+    # end
+    # @order.update(order_params)
   end
 
   private
