@@ -35,7 +35,7 @@
     <tbody>
         <tr>
           <td>自宅へ</td>
-          <td><%= f.radio_button :address, 0 %></td>
+          <td><%= f.radio_button :address, 0, :checked => true %></td>
           <td><%= current_end_user.last_name %> <%= current_end_user.first_name %></td>
           <td><%= current_end_user.postal_code %></td>
           <td><%= current_end_user.address %></td>
