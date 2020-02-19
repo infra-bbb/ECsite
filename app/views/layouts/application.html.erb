@@ -14,9 +14,9 @@
       <%= link_to "マイページ", public_end_user_path(current_end_user) %>
       <%= link_to "カート一覧", public_cart_items_path %>
       <%= link_to "ログアウト", destroy_end_user_session_path, method: :delete %>
-      <% form_tag(public_items_path,:method => 'get') do %>
-        <%= text_field_tag :search %>
-        <%= submit_tag 'Search', :name => nil %>
+      <%= form_tag(public_items_path, :method => 'get') do %>
+        <%= autocomplete_field_tag 'item[name]', nil, public_items_path %>
+        <%= submit_tag '商品検索', :name => nil %>
       <% end %>
     <% elsif admin_signed_in? %>
       <%= link_to "受注一覧", admin_orders_path %>

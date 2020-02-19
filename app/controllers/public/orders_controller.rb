@@ -7,9 +7,29 @@ class Public::OrdersController < ApplicationController
     session[:order] = nil
   end
 
+  def index
+    @orders = Order.where(end_user_id: current_end_user.id)
+  end
+
+  def show
+    @order_details = OrderDetail.where(order_id: params[:id])
+  end
+
+  def confirm
+    @orders = []
+    cart_items = CartItem.where(end_user_id: current_end_user.id)
+    cart_items.each do |cart_item| 
+      item = Item.find(cart_item.item_id)
+      subtotal = item.price * cart_item.amount
+      order_detail = OrderDetail.new(amount: cart_item.amount,
+                                     subtotal: item.price * cart_item.amount)
+      @orders.push([item.name, order_detail])
+    end
+  end
+
   def register
     postage = 800
-    total_price = 0 + 800
+    total_price = 0 + postage
 
     address_id = params[:address]
     address_id = address_id.to_i
@@ -38,18 +58,6 @@ class Public::OrdersController < ApplicationController
       redirect_to new_public_order_path
     else
       redirect_to public_orders_confirm_path
-    end
-  end
-
-  def confirm
-    @orders = []
-    cart_items = CartItem.where(end_user_id: current_end_user.id)
-    cart_items.each do |cart_item| 
-      item = Item.find(cart_item.item_id)
-      subtotal = item.price * cart_item.amount
-      order_detail = OrderDetail.new(amount: cart_item.amount,
-                                     subtotal: item.price * cart_item.amount)
-      @orders.push([item.name, order_detail])
     end
   end
 
@@ -82,23 +90,9 @@ class Public::OrdersController < ApplicationController
       cart_item.destroy
     end
     redirect_to public_orders_done_path
-  end
-
-  
-
-  def index
-    @orders = Order.where(end_user_id: current_end_user.id)
-  end
-
-  def show
-    @order_details = OrderDetail.where(order_id: params[:id])
-  end
+  end  
 
   private
-
-  def order_params
-    params.require(:order).permit(:recipient_name, :postal_code, :address, :payment_way)
-  end
 
   def address_params
     params.require(:address).permit(:recipient_name, :postal_code, :address, :end_user_id)

@@ -1,9 +1,14 @@
 class Public::ItemsController < ApplicationController
-  def index
-    @items = Item.search(params[:search])
-  end
 
   def root
+  end
+
+  def index
+    if params[:item].present?
+      @items = Item.search(params[:item][:name])
+    else
+      @items = Item.all      
+    end
   end
 
   def show

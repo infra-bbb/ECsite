@@ -17,11 +17,11 @@ class Admin::ItemsController < ApplicationController
   end
 
   def index
-    @items = {}
+    @items = Array.new
     items = Item.all
     items.each do |item|
       genre = Genre.find(item.genre_id)
-      @items[genre.name] = item
+      @items.push([genre.name, item])
     end
   end
 
