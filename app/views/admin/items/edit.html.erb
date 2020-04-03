@@ -1,14 +1,61 @@
-<%= form_for(@item, url: admin_item_path(@item)) do |f| %>
-  <span>商品名</span><br>
-  <%= f.text_field :name %><br>
-  <span>値段<br>
-  <%= f.text_field :price %> 円</span><br>
-  <span>ジャンル</span>
-  <%= f.collection_select :genre_id, Genre.all, :id, :name %><br>
-  <span>販売ステータス</span><br>
-  <%= f.radio_button :status, :販売中 %>
-  <span>販売中</span>
-  <%= f.radio_button :status, :販売停止中 %>
-  <span>販売停止中</span><br>
-  <%= f.submit '更新' %>
-<% end %>
+<div class="row">
+  <h3><strong>商品詳細画面</strong></h3>
+  <%= render "errors", model: @item %>
+
+  <%= form_for(@item, url: admin_item_path(@item), html: {class: "form-horizontal"}) do |f| %>
+    <div class="row">
+      <div class="col-xs-4">
+        <%= f.attachment_field :item_image %>
+        <div id="img_field" onClick="$('#file').click()" >
+ 
+          <% if @item.item_image.present? %>
+            <%= image_tag(@item.item_image.url) %>
+          <% else %>
+            <i class="fas fa-image"></i><i class="fas fa-file-upload add"></i>
+          <% end %>
+  
+        </div>
+      
+      <%= f.file_field :image, class: "btn btn-info", style: "", id: "file"%>
+
+      </div>
+      <div class="col-xs-4">
+        <div class="form-group">
+          <label class="col-xs-4 control-label">商品名</label>
+          <div class="col-xs-8">
+            <%= f.text_field :name, autofocus: true, autocomplete: "name", class: "form-control" %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">商品説明</label>
+          <div class="col-xs-8">
+            <%= f.text_field :description, class: "form-control", style: "height: 150px;" %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">ジャンル</label>
+          <div class="col-xs-8">
+            <%= f.collection_select :genre_id, Genre.all, :id, :name, {prompt: "--選択してください--"}, class: "form-control" %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">税抜価格</label>
+          <div class="col-xs-8">
+            <%= f.text_field :price, class: "form-control", placeholder: "円", style: "text-align: right;" %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label">販売ステータス</label>
+          <div class="col-xs-8">
+            <%= f.select :status, Item.statuses, {prompt: "--選択してください--"}, class: "form-control" %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-2 col-xs-offset-9">
+        <%= f.submit '変更を保存', class: "btn btn-lg btn-block btn-info" %>
+      </div>
+  <% end %>
+</div>

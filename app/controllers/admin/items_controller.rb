@@ -17,12 +17,12 @@ class Admin::ItemsController < ApplicationController
   end
 
   def index
-    @items = Array.new
-    items = Item.all
-    items.each do |item|
-      genre = Genre.find(item.genre_id)
-      @items.push([genre.name, item])
-    end
+    @items = Item.all
+    # items = Item.all
+    # items.each do |item|
+    #   genre = Genre.find(item.genre_id)
+    #   @items.push([genre.name, item])
+    # end
   end
 
   def show

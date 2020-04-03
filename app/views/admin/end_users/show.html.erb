@@ -1,2 +1,48 @@
-<h1>Admin::EndUsers#show</h1>
-<p>Find me in app/views/admin/end_users/show.html.erb</p>
+<div class="row">
+  <h3><strong>会員詳細画面</strong></h3>
+  <div class="col-xs-6 col-xs-offset-1">
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-xs-3">顧客ID</div>
+      <div class="col-xs-9">
+        <%= @end_user.id %>
+        <% unless @end_user.deleted_at? %>
+          <span class="label label-primary" style="font-size: 12px;">有効会員</span>
+        <% else %>
+          <span class="label label-danger" style="font-size: 12px;">退会済会員</span>
+        <% end %>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-xs-3">氏名</div>
+      <div class="col-xs-9"><%= @end_user.last_name %> <%= @end_user.first_name %></div>
+    </div>
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-xs-3">フリガナ</div>
+      <div class="col-xs-9"><%= @end_user.last_name_kana %> <%= @end_user.first_name_kana %></div>
+    </div>
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-xs-3">郵便番号</div>
+      <div class="col-xs-9"><%= @end_user.postal_code %></div>
+    </div>
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-xs-3">住所</div>
+      <div class="col-xs-9"><%= @end_user.address %></div>
+    </div>
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-xs-3">電話番号</div>
+      <div class="col-xs-9"><%= @end_user.phone_number %></div>
+    </div>
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-xs-3">メールアドレス</div>
+      <div class="col-xs-9"><%= @end_user.email %></div>
+    </div>
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-xs-3">
+        <%= link_to "編集する", edit_admin_end_user_path(@end_user), class: "btn btn-block btn-info" %>
+      </div>
+      <div class="col-xs-8">
+        <%= link_to "注文履歴一覧を見る", "#", class: "btn btn-info" %>
+      </div>
+    </div>
+  </div>
+</div>

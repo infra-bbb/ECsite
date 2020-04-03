@@ -1,0 +1,15 @@
+<% if model.errors.any? %>
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="alert alert-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="lead"><%= pluralize(model.errors.count, "error") %> prohibited this item from being saved:</span>
+        <ul>
+          <% model.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+<% end %>
